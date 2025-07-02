@@ -1,4 +1,5 @@
 import AppLayout from '@/layout/AppLayout.vue';
+import { useAuthStore } from '@/stores/authStore';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -6,6 +7,7 @@ const router = createRouter({
     routes: [
         {
             path: '/',
+            meta: { requiresAuth: true },
             component: AppLayout,
             children: [
                 {
@@ -123,6 +125,21 @@ const router = createRouter({
             component: () => import('@/views/pages/auth/Login.vue')
         },
         {
+            path: '/auth/verify-face-login',
+            name: 'verify-face-login',
+            component: () => import('@/views/pages/auth/VerifyFaceLogin.vue')
+        },
+        {
+            path: '/auth/register',
+            name: 'register',
+            component: () => import('@/views/pages/auth/Register.vue')
+        },
+        {
+            path: '/auth/verify-phone',
+            name: 'verify-phone',
+            component: () => import('@/views/pages/auth/VerifyPhone.vue')
+        },
+        {
             path: '/auth/access',
             name: 'accessDenied',
             component: () => import('@/views/pages/auth/Access.vue')
@@ -133,6 +150,16 @@ const router = createRouter({
             component: () => import('@/views/pages/auth/Error.vue')
         }
     ]
+});
+
+router.beforeEach((to, from, next) => {
+    const authStore = useAuthStore();
+
+    if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+        next({ name: 'login' }); 
+    } else {
+        next();
+    }
 });
 
 export default router;
