@@ -44,7 +44,9 @@ const goToRegister = () => {
                             <Password id="password" v-model="password" placeholder="Sua senha" :toggleMask="true" class="mb-4" :feedback="false" inputClass="w-full md:w-[30rem]" fluid></Password>
 
                             <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                                <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Esqueceu a senha?</span>
+                                <router-link to="/auth/forgot-password" class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">
+                                    Esqueceu a senha?
+                                </router-link>
                             </div>
                             
                             <Button label="Login" type="submit" class="w-full"></Button>

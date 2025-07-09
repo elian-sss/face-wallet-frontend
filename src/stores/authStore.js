@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', {
         token: localStorage.getItem('token') || null,
         user: JSON.parse(localStorage.getItem('user')) || null,
         userForVerification: null,
+        identifierForReset: null,
     }),
 
     getters: {
@@ -98,6 +99,9 @@ export const useAuthStore = defineStore('auth', {
         async requestPasswordReset(payload) {
              try {
                 await apiClient.post('/auth/password-reset/request/', payload);
+                
+                this.identifierForReset = payload.email; 
+
              } catch (error) {
                 console.error("Falha ao solicitar redefinição de senha:", error.response?.data || error.message);
                 throw error;
@@ -105,8 +109,17 @@ export const useAuthStore = defineStore('auth', {
         },
 
         async confirmPasswordReset(payload) {
+            if (!this.identifierForReset) {
+                 throw new Error("Nenhum processo de redefinição de senha iniciado.");
+            }
             try {
-                await apiClient.post('/auth/password-reset/confirm/', payload);
+                const finalPayload = {
+                    ...payload,
+                    email: this.identifierForReset,
+                }
+                await apiClient.post('/auth/password-reset/confirm/', finalPayload);
+                
+                this.identifierForReset = null;
                 router.push('/auth/login');
             } catch(error) {
                 console.error("Falha ao confirmar redefinição de senha:", error.response?.data || error.message);
