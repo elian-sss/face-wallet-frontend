@@ -3,7 +3,6 @@ import { useAuthStore } from '@/stores/authStore';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-// A lógica continua a mesma e não precisa de alterações.
 const username = ref('');
 const password = ref('');
 
