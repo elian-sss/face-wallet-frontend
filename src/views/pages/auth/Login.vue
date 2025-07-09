@@ -1,9 +1,9 @@
 <script setup>
-import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
 import { useAuthStore } from '@/stores/authStore';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+// A lógica continua a mesma e não precisa de alterações.
 const username = ref('');
 const password = ref('');
 
@@ -11,10 +11,10 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 const handleLogin = () => {
-  authStore.login({
-    username: username.value,
-    password: password.value,
-  });
+    authStore.login({
+        username: username.value,
+        password: password.value
+    });
 };
 
 const goToRegister = () => {
@@ -23,50 +23,106 @@ const goToRegister = () => {
 </script>
 
 <template>
-    <FloatingConfigurator />
-    <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
-        <div class="flex flex-col items-center justify-center">
-            <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
-                <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
-                    <div class="text-center mb-8">
-                        <svg viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="mb-8 w-16 shrink-0 mx-auto">
-                            </svg>
-                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">FaceWallet</div>
-                        <span class="text-muted-color font-medium">Faça login para continuar</span>
-                    </div>
-
-                    <form @submit.prevent="handleLogin">
-                        <div>
-                            <label for="username" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Usuário</label>
-                            <InputText id="username" type="text" placeholder="Seu nome de usuário" class="w-full md:w-[30rem] mb-8" v-model="username" />
-
-                            <label for="password" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Senha</label>
-                            <Password id="password" v-model="password" placeholder="Sua senha" :toggleMask="true" class="mb-4" :feedback="false" inputClass="w-full md:w-[30rem]" fluid></Password>
-
-                            <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                                <router-link to="/auth/forgot-password" class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">
-                                    Esqueceu a senha?
-                                </router-link>
-                            </div>
-                            
-                            <Button label="Login" type="submit" class="w-full"></Button>
-                             <Button label="Criar Conta" severity="secondary" outlined class="w-full" @click="goToRegister"></Button>
-                        </div>
-                    </form>
-                    </div>
+    <div class="login-container flex items-center justify-center min-h-screen p-4 overflow-hidden">
+        
+        <div class="glassmorphism-card w-full max-w-md text-white">
+            
+            <div class="text-center mb-10">
+                <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6 border border-white border-opacity-30">
+                     <i class="pi pi-lock text-3xl text-white"></i>
+                </div>
+                <h1 class="text-3xl font-bold tracking-wider mb-2">Face Wallet</h1>
+                <p class="text-gray-300 text-sm">Digite seus dados para continuar</p>
             </div>
+            
+            <form @submit.prevent="handleLogin" class="flex flex-col gap-6">
+                
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-300 mb-2">Usuário</label>
+                    <input 
+                        id="username"
+                        v-model="username"
+                        type="text" 
+                        class="form-input rounded"
+                    />
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Senha</label>
+                     <input 
+                        id="password"
+                        v-model="password"
+                        type="password"
+                        class="form-input rounded"
+                    />
+                </div>
+
+                <div class="text-right -mt-2">
+                    <router-link to="/auth/forgot-password" class="text-sm font-medium text-primary-400 hover:text-primary-300 transition-colors">
+                        Esqueceu a senha?
+                    </router-link>
+                </div>
+
+                <button 
+                    type="submit" 
+                    class="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 rounded-lg transition-transform transform hover:scale-105 shadow-lg"
+                >
+                    Entrar
+                </button>
+
+                <div class="my-2 flex items-center">
+                    <div class="flex-grow border-t border-gray-600 border-opacity-50"></div>
+                    <span class="flex-shrink mx-4 text-xs text-gray-400">Não tem uma conta?</span>
+                    <div class="flex-grow border-t border-gray-600 border-opacity-50"></div>
+                </div>
+
+                <button 
+                    type="button" 
+                    @click="goToRegister"
+                    class="w-full bg-gray-500 bg-opacity-30 hover:bg-opacity-40 text-white font-bold py-3 rounded-lg transition-colors border border-gray-600"
+                >
+                    Criar Conta
+                </button>
+            </form>
         </div>
     </div>
 </template>
 
 <style scoped>
-.pi-eye {
-    transform: scale(1.6);
-    margin-right: 1rem;
+/* Fundo dinâmico com "aurora borealis" para o efeito de blur funcionar */
+.login-container {
+    background-color: #020617; /* slate-950 */
+    background-image: 
+        radial-gradient(at 20% 25%, hsla(212, 90%, 50%, 0.3) 0px, transparent 50%),
+        radial-gradient(at 75% 30%, hsla(262, 80%, 55%, 0.25) 0px, transparent 50%),
+        radial-gradient(at 5% 80%, hsla(162, 70%, 50%, 0.2) 0px, transparent 50%),
+        radial-gradient(at 80% 95%, hsla(343, 80%, 55%, 0.25) 0px, transparent 50%);
 }
 
-.pi-eye-slash {
-    transform: scale(1.6);
-    margin-right: 1rem;
+/* Efeito Glassmorphism para o cartão de login */
+.glassmorphism-card {
+  background: rgba(15, 23, 42, 0.4); /* Cor de fundo semi-transparente (slate-900 com opacidade) */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); /* Para compatibilidade com Safari */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3rem;
+  border-radius: 1.5rem;
+}
+
+/* Estilo unificado para os inputs */
+.form-input {
+    width: 100%;
+    padding: 0.75rem 0.5rem;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-bottom-color: var(--primary-color);
 }
 </style>
