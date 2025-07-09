@@ -32,7 +32,7 @@ const authStore = useAuthStore();
                     </g>
                 </svg>
 
-                <span>SAKAI</span>
+                <span>Face Wallet</span>
             </router-link>
         </div>
 
